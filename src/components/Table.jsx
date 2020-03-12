@@ -1,29 +1,29 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-const addRow = (rowNumber, width, size) => (
-  <tr>
-    {
-      Array
-        .from(Array(width))
-        .map((i) => (
-          <td key={`${rowNumber}_${i}`} style={{ width: size, height: size }}></td>)
-        )
-    }
-  </tr>
-)
+const generateTable = (matrix, size) => {
+  return Array
+    .from(Array(matrix.length))
+    .map((_, rowNumber) => (
+      <tr
+        key={`${Date.now()}${rowNumber}`}
+      >
+        {
+          Array
+            .from(Array(matrix[0].length))
+            .map((_, collNumber) => (
+            <td key={matrix[rowNumber][collNumber]} style={{ width: size, height: size }}>{matrix[rowNumber][collNumber]}</td>)
+            )
+        }
+      </tr>
+    ))
+};
 
-const generateDefaultTable = (height, width, size) => Array
-  .from(Array(height))
-  .map(rowNumber => addRow(rowNumber, width, size));
-
-
-const Table = ({ initialHeight, initialWidth, cellSize }) => {
-  const [height, setHeight] = useState(initialHeight);
-  const [width, setWidth] = useState(initialHeight);
-  const [size, setSize] = useState(cellSize);
+const Table = ({ matrix, cellSize , onMouseOver}) => {
   return (
-    <table id="main-table">
-      {generateDefaultTable(height, width, size)}
+    <table id="main-table" onMouseOver={onMouseOver}>
+      <tbody>
+        {generateTable(matrix, cellSize)}
+      </tbody>
     </table>
   );
 }
