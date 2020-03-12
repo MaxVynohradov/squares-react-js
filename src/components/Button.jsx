@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 
-const Button = ({ children: text, size, initialPosition, className, handleClick }) => {
+const Button = ({ children: text, size, dynamicStyles, className, handleClick, onMouseLeave }) => {
   return (
     <div
       className={`button ${className}`} 
-      style={{ ...initialPosition, width: size, height: size }}
+      style={{ ...dynamicStyles, width: size, height: size }}
       onClick={handleClick}
+      onMouseLeave={onMouseLeave}
     >
       <span>{text}</span>
     </div>

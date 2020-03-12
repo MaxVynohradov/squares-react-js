@@ -18,9 +18,9 @@ const generateTable = (matrix, size) => {
     ))
 };
 
-const Table = ({ matrix, cellSize , onMouseOver}) => {
+const Table = ({ matrix, cellSize , onMouseOver, onMouseLeave }) => {
   return (
-    <table id="main-table" onMouseOver={onMouseOver}>
+    <table id="main-table" onMouseOver={onMouseOver} onMouseLeave={onMouseLeave} >
       <tbody>
         {generateTable(matrix, cellSize)}
       </tbody>
