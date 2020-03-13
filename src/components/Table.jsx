@@ -13,7 +13,6 @@ const generateTable = (matrix, size) => Array
               <td 
                 key={`${matrix[rowNumber][collNumber].collNumber}`}
                 style={{ width: size, height: size }}>
-                  {JSON.stringify(matrix[rowNumber][collNumber])}
               </td>
           ))
       }
