@@ -1,12 +1,10 @@
-import React, { useState }  from 'react';
+import React, { useState, memo }  from 'react';
 import Table from './Table'
 import Button from './Button'
 
-const generateCellId = (rowNumber, collNumber) => `${Date.now()}${rowNumber}${collNumber}`
-
-const generateMatrix = (height, width) => Array
+const generateMatrix = (height, width, i = 0) => Array
   .from(Array(height))
-  .map((_, rowNumber) => Array.from(Array(width)).map((_, collNumber) => generateCellId(rowNumber, collNumber)));
+  .map((_, rowNumber) => Array.from(Array(width)).map((_, collNumber) => ({ rowNumber, collNumber })));
 
 
 const hideRemoveButtonsProcessor = (setButtonVisibility) => {
@@ -21,26 +19,21 @@ const hideRemoveButtons = (setRemoveButtonsPosition) => {
 //   this.#timer = setTimeout(this.hideRemoveButtonsProcessor, 3000);
 // }
 
-
 const addRowActionHandler = (matrix, setMatrix) => () => {
-  const collNumber = matrix[0].length;
-  const rowNumber = matrix.length;
-  const newMatrix = JSON.parse(JSON.stringify(matrix));
-  newMatrix.push(Array.from(Array(collNumber)).map((_, idx) => generateCellId(rowNumber, idx)))
-  setMatrix(newMatrix);
-}
+  const rowNumber = matrix[matrix.length - 1][0].rowNumber + 1;
+  setMatrix([
+    ...matrix,
+    Array.from(Array(matrix[0].length)).map((_, collNumber) => ({ rowNumber, collNumber })),
+  ])
+};
 
 const addColumnHandler = (matrix, setMatrix) => () => {
-  const collNumber = matrix[0].length;
-  const rowNumber = matrix.length;
-  const newMatrix = JSON.parse(JSON.stringify(matrix)).map(row => ([...row, generateCellId(rowNumber, collNumber)]));
-  setMatrix(newMatrix);
-}
+  setMatrix(
+    [...matrix].map((row, rowNumber) => ([...row, { rowNumber, collNumber: row[row.length - 1].collNumber + 1 }]))
+  )
+};
 
-const removeRowActionHandler = (matrix, setMatrix, rowIndex) => () => {
-  const newMatrix = JSON.parse(JSON.stringify(matrix));
-  setMatrix(newMatrix.filter((v, i) => i !== rowIndex));
-}
+const removeRowActionHandler = (matrix, setMatrix, rowIndex) => () => setMatrix([...matrix].filter((v, i) => i !== rowIndex));
 
 const removeColumnActionHandler = (matrix, setMatrix, columnIndex) => () => {
   const newMatrix = JSON.parse(JSON.stringify(matrix));
@@ -80,6 +73,7 @@ const Generator = ({ initialHeight = 4, initialWidth = 4, cellSize = 50 }) => {
     removeColumnButtonLeft: 3,
     removeRowButtonTop: 2,
   });
+
   return (
     <div className="generator-container" style={{ margin: cellSize * 2 }}>
       <Table 
@@ -89,9 +83,10 @@ const Generator = ({ initialHeight = 4, initialWidth = 4, cellSize = 50 }) => {
         onMouseLeave={mouseLeaveTableOrButtonHandler(setButtonVisibility)}
       />
       <Button 
-        size={cellSize} 
         className="remove-button"
         dynamicStyles={{
+          width: `${cellSize}px`, 
+          height: `${cellSize}px`,
           top: `${-cellSize - 3}px`,
           left: `${removeButtonsPosition.removeColumnButtonLeft}px`,
           visibility: buttonVisibility.removeColumnButtonVisible,
@@ -102,9 +97,10 @@ const Generator = ({ initialHeight = 4, initialWidth = 4, cellSize = 50 }) => {
         -
       </Button>
       <Button 
-        size={cellSize} 
         className="remove-button"
         dynamicStyles={{
+          width: `${cellSize}px`, 
+          height: `${cellSize}px`,
           left: `${-cellSize - 3}px`,
           top: `${removeButtonsPosition.removeRowButtonTop}px`,
           visibility: buttonVisibility.removeRowButtonVisible,
@@ -115,9 +111,10 @@ const Generator = ({ initialHeight = 4, initialWidth = 4, cellSize = 50 }) => {
         -
       </Button>
       <Button 
-        size={cellSize} 
         className="add-button"
         dynamicStyles={{
+          width: `${cellSize}px`, 
+          height: `${cellSize}px`,
           left: "3px",
           bottom: `${-cellSize - 3}px`,
         }}
@@ -127,9 +124,10 @@ const Generator = ({ initialHeight = 4, initialWidth = 4, cellSize = 50 }) => {
         + 
       </Button>
       <Button
-        size={cellSize} 
         className="add-button"
         dynamicStyles={{
+          width: `${cellSize}px`, 
+          height: `${cellSize}px`,
           right: `${-cellSize - 3}px`,
           top: "2px",
         }}
@@ -142,4 +140,4 @@ const Generator = ({ initialHeight = 4, initialWidth = 4, cellSize = 50 }) => {
   );
 }
 
-export default Generator;
+export default memo(Generator);

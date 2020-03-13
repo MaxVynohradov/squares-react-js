@@ -42,14 +42,14 @@ table {
 }
 
 td {
-  background-color: rgb(98, 168, 227);
+  background-color: #62a9e3;
 }
 
 .add-button {
-  background-color: rgb(227, 178, 79);
+  background-color: #fcba03;
 }
 
 .remove-button {
-  background-color: rgb(163, 33, 20);
+  background-color: #a32014;
   /* visibility: hidden; */
 }
