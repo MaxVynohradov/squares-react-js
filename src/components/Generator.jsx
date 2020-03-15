@@ -14,10 +14,6 @@ const Generator = ({ initialHeight = 4, initialWidth = 4, cellSize = 50 }) => {
   const [removeRowButtonTop, setRemoveRowButtonTop] = useState(2);
   const [removeColumnButtonLeft, setRemoveColumnButtonLeft] = useState(3);
 
-  const hideRemoveButtonsProcessor = useCallback(() => {
-    setRemoveRowButtonVisibility('hidden')
-    setRemoveColumnButtonVisibility('hidden')
-  }, []);
 
   const hideRemoveButtons = useCallback(() => {
     // return useEffect(() => {
@@ -27,8 +23,9 @@ const Generator = ({ initialHeight = 4, initialWidth = 4, cellSize = 50 }) => {
     //   }, 3000);
     //   return () => clearTimeout(timer);
     // }, []);
-    hideRemoveButtonsProcessor();
-  }, [hideRemoveButtonsProcessor])
+    setRemoveRowButtonVisibility('hidden')
+    setRemoveColumnButtonVisibility('hidden')
+  }, [])
 
   const removeColumnActionHandler = useCallback(() => {
     if (matrix[0].length > 1) setMatrix(matrix.map(row => row.filter((v, i) => i !== columnIndex)));

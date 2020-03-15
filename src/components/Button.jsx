@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
 const Button = ({ children: text, dynamicStyles, className, handleClick, onMouseLeave }) => {
-
+  
   return (
     <div
       className={`button ${className}`} 
