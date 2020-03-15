@@ -1,6 +1,8 @@
-import React, { useState, useEffect, useCallback, memo } from 'react';
-import Table from './Table'
-import Button from './Button'
+import React, { useState, useCallback, memo } from 'react';
+import Table from './Table';
+import Button from './Button';
+
+let timeout;
 
 const generateMatrix = (height, width, i = 0) => Array
   .from(Array(height))
@@ -16,21 +18,17 @@ const Generator = ({ initialHeight = 4, initialWidth = 4, cellSize = 50 }) => {
 
 
   const hideRemoveButtons = useCallback(() => {
-    // return useEffect(() => {
-    //   const timer = setTimeout(() => {
-    //     console.log('This will run after 3 second!')
-    //     hideRemoveButtonsProcessor();
-    //   }, 3000);
-    //   return () => clearTimeout(timer);
-    // }, []);
-    setRemoveRowButtonVisibility('hidden')
-    setRemoveColumnButtonVisibility('hidden')
+    timeout = setTimeout(() => {
+      setRemoveRowButtonVisibility('hidden');
+      setRemoveColumnButtonVisibility('hidden');  
+    }, 3000);
   }, [])
 
   const removeColumnActionHandler = useCallback(() => {
+    clearTimeout(timeout);
     if (matrix[0].length > 1) setMatrix(matrix.map(row => row.filter((v, i) => i !== columnIndex)));
     if (matrix[0].length === 1) setRemoveColumnButtonVisibility('hidden');
-    if (columnIndex === matrix[0].length) {
+    if (columnIndex === matrix[0].length - 1) {
       setRemoveColumnButtonLeft(removeColumnButtonLeft - cellSize - 2);
       setItemToRemove({ columnIndex: columnIndex - 1, rowIndex });
     }
@@ -38,9 +36,10 @@ const Generator = ({ initialHeight = 4, initialWidth = 4, cellSize = 50 }) => {
   }, [cellSize, columnIndex, hideRemoveButtons, matrix, removeColumnButtonLeft, rowIndex]);
 
   const removeRowActionHandler = useCallback(() => {
+    clearTimeout(timeout);
     if (matrix.length > 1) setMatrix([...matrix].filter((v, i) => i !== rowIndex));
     if (matrix.length === 1) setRemoveRowButtonVisibility('hidden');
-    if (rowIndex === matrix.length) {
+    if (rowIndex === matrix.length - 1) {
       setRemoveRowButtonTop(removeRowButtonTop - cellSize - 2);
       setItemToRemove({ columnIndex, rowIndex: rowIndex - 1 });
     }
@@ -62,6 +61,7 @@ const Generator = ({ initialHeight = 4, initialWidth = 4, cellSize = 50 }) => {
   }, [matrix]);
 
   const mouseOverTableHandler = useCallback((event) => {
+    clearTimeout(timeout);
     if (!(event.target instanceof HTMLTableCellElement)) return;
     const {
       target: {
