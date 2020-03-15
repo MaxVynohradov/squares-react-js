@@ -1,14 +1,10 @@
-import React, { useState, memo } from 'react';
+import React, { useState, useEffect, useCallback, memo } from 'react';
 import Table from './Table'
 import Button from './Button'
 
 const generateMatrix = (height, width, i = 0) => Array
   .from(Array(height))
   .map((_, rowNumber) => Array.from(Array(width)).map((_, collNumber) => ({ rowNumber, collNumber })));
-
-// hideRemoveButtons() {
-//   this.#timer = setTimeout(this.hideRemoveButtonsProcessor, 3000);
-// }
 
 const Generator = ({ initialHeight = 4, initialWidth = 4, cellSize = 50 }) => {
   const [matrix, setMatrix] = useState(generateMatrix(initialHeight, initialWidth));
@@ -18,17 +14,23 @@ const Generator = ({ initialHeight = 4, initialWidth = 4, cellSize = 50 }) => {
   const [removeRowButtonTop, setRemoveRowButtonTop] = useState(2);
   const [removeColumnButtonLeft, setRemoveColumnButtonLeft] = useState(3);
 
-  const hideRemoveButtonsProcessor = () => {
+  const hideRemoveButtonsProcessor = useCallback(() => {
     setRemoveRowButtonVisibility('hidden')
     setRemoveColumnButtonVisibility('hidden')
-  }
+  }, []);
 
-  const hideRemoveButtons = () => {
+  const hideRemoveButtons = useCallback(() => {
+    // return useEffect(() => {
+    //   const timer = setTimeout(() => {
+    //     console.log('This will run after 3 second!')
+    //     hideRemoveButtonsProcessor();
+    //   }, 3000);
+    //   return () => clearTimeout(timer);
+    // }, []);
     hideRemoveButtonsProcessor();
-    // setTimeout(hideRemoveButtonsProcessor(), 3000);
-  }
+  }, [hideRemoveButtonsProcessor])
 
-  const removeColumnActionHandler = () => {
+  const removeColumnActionHandler = useCallback(() => {
     if (matrix[0].length > 1) setMatrix(matrix.map(row => row.filter((v, i) => i !== columnIndex)));
     if (matrix[0].length === 1) setRemoveColumnButtonVisibility('hidden');
     if (columnIndex === matrix[0].length) {
@@ -36,9 +38,9 @@ const Generator = ({ initialHeight = 4, initialWidth = 4, cellSize = 50 }) => {
       setItemToRemove({ columnIndex: columnIndex - 1, rowIndex });
     }
     hideRemoveButtons();
-  };
+  }, [cellSize, columnIndex, hideRemoveButtons, matrix, removeColumnButtonLeft, rowIndex]);
 
-  const removeRowActionHandler = () => {
+  const removeRowActionHandler = useCallback(() => {
     if (matrix.length > 1) setMatrix([...matrix].filter((v, i) => i !== rowIndex));
     if (matrix.length === 1) setRemoveRowButtonVisibility('hidden');
     if (rowIndex === matrix.length) {
@@ -46,7 +48,7 @@ const Generator = ({ initialHeight = 4, initialWidth = 4, cellSize = 50 }) => {
       setItemToRemove({ columnIndex, rowIndex: rowIndex - 1 });
     }
     hideRemoveButtons();
-  };
+  }, [cellSize, columnIndex, hideRemoveButtons, matrix, removeRowButtonTop, rowIndex]);
 
   const addColumnHandler = () => {
     setMatrix(
@@ -54,15 +56,15 @@ const Generator = ({ initialHeight = 4, initialWidth = 4, cellSize = 50 }) => {
     )
   };
 
-  const addRowActionHandler = () => {
+  const addRowActionHandler = useCallback(() => {
     const rowNumber = matrix[matrix.length - 1][0].rowNumber + 1;
     setMatrix([
       ...matrix,
       Array.from(Array(matrix[0].length)).map((_, collNumber) => ({ rowNumber, collNumber })),
     ])
-  };
+  }, [matrix]);
 
-  const mouseOverTableHandler = (event) => {
+  const mouseOverTableHandler = useCallback((event) => {
     if (!(event.target instanceof HTMLTableCellElement)) return;
     const {
       target: {
@@ -84,15 +86,15 @@ const Generator = ({ initialHeight = 4, initialWidth = 4, cellSize = 50 }) => {
       setRemoveColumnButtonLeft(offsetLeft)
     };
 
-  }
+  }, [matrix]);
 
-  const mouseLeaveTableOrButtonHandler = (event) => {
+  const mouseLeaveTableOrButtonHandler = useCallback((event) => {
     const isMouseMovedOnButton = event.relatedTarget.classList.contains('remove-button') ||
       (event.relatedTarget.parentElement && event.relatedTarget.parentElement.classList.contains('remove-button'));
     const isMouseMovedFromTable = event.target.id === 'main-table';
     if (isMouseMovedFromTable && isMouseMovedOnButton) return;
     hideRemoveButtons();
-  }
+  }, [hideRemoveButtons])
 
   return (
     <div className="generator-container" style={{ margin: cellSize * 2 }}>
