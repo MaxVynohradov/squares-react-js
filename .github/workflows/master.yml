@@ -6,15 +6,29 @@ on:
       - master
 
 jobs:
-  deploy:
+  install:
+    name: Install
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - uses: actions/setup-node@v1
-      with:
-        node-version: 12.x
-    - uses: borales/actions-yarn@v2.0.0
-    - run: sh -c "sudo chmod -R 777 /home/runner/work/squares-react-js/squares-react-js/node_modules/.yarn-integrity"
-    - run: yarn config set ignore-engines true
-    - run: yarn
-    - run: yarn run deploy
+    - uses: actions/setup-node@master
+    - name: Install Dependencies
+      run: yarn
+      env:
+        CI: true
+
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    needs: install
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+
+      - name: Build and Deploy
+        uses: JamesIves/github-pages-deploy-action@master
+        env:
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: build
+          BUILD_SCRIPT: yarn && yarn build
