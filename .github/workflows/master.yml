@@ -14,6 +14,7 @@ jobs:
       with:
         node-version: 12.x
     - uses: borales/actions-yarn@v2.0.0
+    - run: sh -c "sudo chmod -R 777 /home/runner/work/squares-react-js/squares-react-js/node_modules/.yarn-integrity"
     - run: yarn config set ignore-engines true
     - run: yarn
     - run: yarn run deploy
