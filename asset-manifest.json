@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/squares-react-js/static/css/main.a5e39e8f.chunk.css",
+    "main.js": "/squares-react-js/static/js/main.f775b7e6.chunk.js",
+    "main.js.map": "/squares-react-js/static/js/main.f775b7e6.chunk.js.map",
+    "runtime-main.js": "/squares-react-js/static/js/runtime-main.ae9eaa11.js",
+    "runtime-main.js.map": "/squares-react-js/static/js/runtime-main.ae9eaa11.js.map",
+    "static/js/2.9034ca46.chunk.js": "/squares-react-js/static/js/2.9034ca46.chunk.js",
+    "static/js/2.9034ca46.chunk.js.map": "/squares-react-js/static/js/2.9034ca46.chunk.js.map",
+    "index.html": "/squares-react-js/index.html",
+    "precache-manifest.9131ca142a58d0db88e90a2c5d67f426.js": "/squares-react-js/precache-manifest.9131ca142a58d0db88e90a2c5d67f426.js",
+    "service-worker.js": "/squares-react-js/service-worker.js",
+    "static/css/main.a5e39e8f.chunk.css.map": "/squares-react-js/static/css/main.a5e39e8f.chunk.css.map",
+    "static/js/2.9034ca46.chunk.js.LICENSE.txt": "/squares-react-js/static/js/2.9034ca46.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.ae9eaa11.js",
+    "static/js/2.9034ca46.chunk.js",
+    "static/css/main.a5e39e8f.chunk.css",
+    "static/js/main.f775b7e6.chunk.js"
+  ]
+}
