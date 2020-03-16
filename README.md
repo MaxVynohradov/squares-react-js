@@ -1,3 +1,5 @@
+![master-branch-ci](https://github.com/MaxVinogradov/squares-react-js/workflows/master-branch-ci/badge.svg?branch=master&event=push)
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
